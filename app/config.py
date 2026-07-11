@@ -6,6 +6,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///monitor_climatico.db")
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+elif DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
 
 # API Open-Meteo: gratuita, sem chave, até 10.000 chamadas/dia (uso não comercial).
 API_BASE_URL = "https://api.open-meteo.com/v1/forecast"
