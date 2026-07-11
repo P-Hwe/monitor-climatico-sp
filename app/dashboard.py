@@ -74,6 +74,8 @@ periodo = st.selectbox("Período", ["Últimas 24 horas", "Últimas 48 horas", "�
 horas = {"Últimas 24 horas": 24, "Últimas 48 horas": 48, "Últimos 7 dias": 24 * 7}[periodo]
 
 df_hist = historico_condicoes(horas)
+if not df_hist.empty:
+    df_hist = df_hist.sort_values(["cidade", "coletado_em"])
 
 tab_temp, tab_precip = st.tabs(["Temperatura", "Precipitação"])
 
@@ -86,10 +88,15 @@ with tab_temp:
             x="coletado_em",
             y="temperatura",
             color="cidade",
+            markers=True,
             labels={"coletado_em": "", "temperatura": "Temperatura (°C)"},
             title=f"Temperatura por cidade — {periodo.lower()}",
         )
+        fig.update_traces(line=dict(width=2), marker=dict(size=6))
         st.plotly_chart(fig, use_container_width=True)
+
+        if df_hist.groupby("cidade").size().max() < 2:
+            st.caption("As linhas aparecem depois que houver pelo menos duas coletas por cidade.")
 
 with tab_precip:
     if df_hist.empty:
