@@ -2,11 +2,14 @@
 from __future__ import annotations
 
 import datetime as dt
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 from sqlalchemy import select
 
 from app.models import Cidade, CondicaoAtual, PrevisaoHoraria, SessionLocal
+
+SAO_PAULO_TZ = ZoneInfo("America/Sao_Paulo")
 
 
 def condicao_atual_por_cidade() -> pd.DataFrame:
@@ -35,7 +38,10 @@ def condicao_atual_por_cidade() -> pd.DataFrame:
                     "coletado_em": ultima.coletado_em,
                 }
             )
-    return pd.DataFrame(registros)
+    df = pd.DataFrame(registros)
+    if not df.empty:
+        df["coletado_em"] = pd.to_datetime(df["coletado_em"], utc=True).dt.tz_convert(SAO_PAULO_TZ)
+    return df
 
 
 def historico_condicoes(horas: int = 48) -> pd.DataFrame:
@@ -55,6 +61,8 @@ def historico_condicoes(horas: int = 48) -> pd.DataFrame:
             .order_by(CondicaoAtual.coletado_em)
         )
         df = pd.read_sql(stmt, session.bind)
+    if not df.empty:
+        df["coletado_em"] = pd.to_datetime(df["coletado_em"], utc=True).dt.tz_convert(SAO_PAULO_TZ)
     return df
 
 
