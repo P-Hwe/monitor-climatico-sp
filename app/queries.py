@@ -58,7 +58,7 @@ def historico_condicoes(horas: int = 48) -> pd.DataFrame:
     return df
 
 
-def acuracia_previsao(horas: int = 24 * 7) -> pd.DataFrame:
+def precisao_previsao(horas: int = 24 * 7) -> pd.DataFrame:
     """
     Compara temperatura prevista x observada, agrupando o erro por
     antecedência da previsão (1h, 3h, 6h, 12h, 24h, 48h antes).

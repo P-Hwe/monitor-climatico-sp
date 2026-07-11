@@ -11,12 +11,18 @@ enquanto o dashboard estiver de pé, a coleta continua rodando a cada
 from __future__ import annotations
 
 import logging
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import plotly.express as px
 import streamlit as st
 
 from app.collector import coletar_clima
-from app.queries import acuracia_previsao, condicao_atual_por_cidade, historico_condicoes
+from app.queries import precisao_previsao as precisao_previsao, condicao_atual_por_cidade, historico_condicoes
 from app.scheduler import iniciar_scheduler
 from app.weather_codes import descrever_codigo_tempo
 
@@ -40,7 +46,7 @@ _bootstrap()
 st.title("🌤️ Monitor Climático SP")
 st.caption(
     "Clima em tempo real de várias cidades — dados da API pública Open-Meteo, "
-    "coletados automaticamente a cada 30 minutos, com acompanhamento da acurácia das previsões."
+    "coletados automaticamente a cada 30 minutos, com acompanhamento da precisão das previsões."
 )
 
 df_atual = condicao_atual_por_cidade()
@@ -102,24 +108,24 @@ with tab_precip:
 
 st.divider()
 
-# ---------- Acurácia das previsões ----------
-st.subheader("Acurácia das previsões")
+# ---------- Precisão das previsões ----------
+st.subheader("Precisão das previsões")
 st.caption(
     "Compara a temperatura prevista com a que de fato foi observada depois, "
     "agrupada pela antecedência com que a previsão foi feita. Quanto mais dados "
     "acumularem ao longo do tempo, mais confiável fica essa análise."
 )
 
-df_acuracia = acuracia_previsao(24 * 7)
+df_previsao = precisao_previsao(24 * 7)
 
-if df_acuracia.empty:
+if df_previsao.empty:
     st.info(
-        "Ainda não há pares de previsão/observação suficientes para calcular a acurácia. "
+        "Ainda não há pares de previsão/observação suficientes para calcular a precisão. "
         "Isso aparece naturalmente depois de algumas horas de coleta contínua."
     )
 else:
     fig = px.bar(
-        df_acuracia,
+        df_previsao,
         x="faixa_antecedencia",
         y="erro_medio",
         text="amostras",

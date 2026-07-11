@@ -1,7 +1,7 @@
 import datetime as dt
 
 from app.models import Cidade, CondicaoAtual, PrevisaoHoraria, SessionLocal
-from app.queries import acuracia_previsao, condicao_atual_por_cidade, historico_condicoes
+from app.queries import precisao_previsao, condicao_atual_por_cidade, historico_condicoes
 
 
 def _popular_cenario_basico():
@@ -75,7 +75,7 @@ def test_acuracia_previsao_calcula_erro_medio_por_faixa():
         )
         session.commit()
 
-    df = acuracia_previsao(horas=24)
+    df = precisao_previsao(horas=24)
 
     assert not df.empty
     linha = df.iloc[0]
@@ -85,5 +85,5 @@ def test_acuracia_previsao_calcula_erro_medio_por_faixa():
 
 
 def test_acuracia_previsao_vazia_sem_dados():
-    df = acuracia_previsao(horas=24)
+    df = precisao_previsao(horas=24)
     assert df.empty
