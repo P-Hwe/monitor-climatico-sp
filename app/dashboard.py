@@ -23,7 +23,7 @@ import streamlit as st
 
 from app.collector import coletar_clima
 from app.queries import precisao_previsao as precisao_previsao, condicao_atual_por_cidade, historico_condicoes
-from app.scheduler import iniciar_scheduler
+
 from app.weather_codes import descrever_codigo_tempo
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -32,13 +32,14 @@ st.set_page_config(page_title="Monitor Climático SP", page_icon="🌤️", layo
 
 
 @st.cache_resource
+@st.cache_resource
 def _bootstrap():
-    """Garante que existe pelo menos uma coleta e liga o scheduler (uma única vez)."""
-    try:
-        coletar_clima()
-    except Exception as exc:
-        logging.warning("Primeira coleta falhou: %s", exc)
-    return iniciar_scheduler()
+   
+    if condicao_atual_por_cidade().empty:
+        try:
+            coletar_clima()
+        except Exception as exc:
+            logging.warning("Coleta inicial falhou: %s", exc)
 
 
 _bootstrap()
