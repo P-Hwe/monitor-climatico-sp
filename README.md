@@ -126,7 +126,7 @@ monitor-climatico-sp/
 └── requirements-dev.txt
 ```
 
-## Como funciona o cálculo de acurácia
+## Como funciona o cálculo de precisão
 
 A cada coleta, o sistema grava:
 1. A **condição atual** (o que o modelo diz que está acontecendo agora)
