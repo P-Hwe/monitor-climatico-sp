@@ -1,4 +1,4 @@
-# 🌤️ Monitor Climático SP
+# 🌤️ Monitor Climático 
 
 Pipeline de dados rodando **24/7** que coleta, armazena e visualiza condições climáticas de várias cidades brasileiras, e — como diferencial — acompanha a **acurácia das próprias previsões** ao longo do tempo, comparando o que foi previsto com o que de fato aconteceu depois.
 
@@ -126,7 +126,7 @@ monitor-climatico-sp/
 └── requirements-dev.txt
 ```
 
-## Como funciona o cálculo de acurácia
+## Como funciona o cálculo de precisão
 
 A cada coleta, o sistema grava:
 1. A **condição atual** (o que o modelo diz que está acontecendo agora)
