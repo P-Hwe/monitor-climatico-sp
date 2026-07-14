@@ -34,7 +34,7 @@ st.set_page_config(page_title="Monitor Climático SP", page_icon="🌤️", layo
 @st.cache_resource
 @st.cache_resource
 def _bootstrap():
-   
+    """Garante que o banco de dados e a primeira coleta existam antes de renderizar o dashboard."""
     if condicao_atual_por_cidade().empty:
         try:
             coletar_clima()
@@ -44,7 +44,7 @@ def _bootstrap():
 
 _bootstrap()
 
-st.title("🌤️ Monitor Climático SP")
+st.title("🌤️ Monitor Climático")
 st.caption(
     "Clima em tempo real de várias cidades — dados da API pública Open-Meteo, "
     "coletados automaticamente a cada 30 minutos, com acompanhamento da precisão das previsões."
