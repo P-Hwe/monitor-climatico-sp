@@ -1,4 +1,4 @@
-# 🌤️ Monitor Climático SP
+# 🌤️ Monitor Climático 
 
 Pipeline de dados rodando **24/7** que coleta, armazena e visualiza condições climáticas de várias cidades brasileiras, e — como diferencial — acompanha a **acurácia das próprias previsões** ao longo do tempo, comparando o que foi previsto com o que de fato aconteceu depois.
 
